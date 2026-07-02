@@ -38,10 +38,10 @@ def bsm_price(s: float, k: float, t: float, r: float, sigma: float,
     """Black-Scholes-Merton price. s=spot, k=strike, t=years, r=rate, q=dividend
     yield, sigma=vol."""
     if t <= 0:  # intrinsic value at/after expiry
-        return max(s - k, 0.0) if right is OptionRight.CALL else max(k - s, 0.0)
+        return max(s - k, 0.0) if right == OptionRight.CALL else max(k - s, 0.0)
     d1, d2 = _d1_d2(s, k, t, r, sigma, q)
     nd1, nd2 = stats.normal_cdf(d1), stats.normal_cdf(d2)
-    if right is OptionRight.CALL:
+    if right == OptionRight.CALL:
         return s * math.exp(-q * t) * nd1 - k * math.exp(-r * t) * nd2
     return k * math.exp(-r * t) * stats.normal_cdf(-d2) - s * math.exp(-q * t) * stats.normal_cdf(-d1)
 
@@ -51,7 +51,7 @@ def bsm_greeks(s: float, k: float, t: float, r: float, sigma: float,
     price = bsm_price(s, k, t, r, sigma, right, q)
     if t <= 0 or sigma <= 0:
         # Degenerate: delta is 0/1 at expiry, other Greeks ~0.
-        if right is OptionRight.CALL:
+        if right == OptionRight.CALL:
             delta = 1.0 if s > k else 0.0
         else:
             delta = -1.0 if s < k else 0.0
@@ -62,7 +62,7 @@ def bsm_greeks(s: float, k: float, t: float, r: float, sigma: float,
     disc_q = math.exp(-q * t)
     gamma = disc_q * pdf / (s * sigma * sqrt_t)
     vega = s * disc_q * pdf * sqrt_t
-    if right is OptionRight.CALL:
+    if right == OptionRight.CALL:
         delta = disc_q * stats.normal_cdf(d1)
         theta = (-s * disc_q * pdf * sigma / (2 * sqrt_t)
                  - r * k * math.exp(-r * t) * stats.normal_cdf(d2)
@@ -84,7 +84,7 @@ def implied_vol(price: float, s: float, k: float, t: float, r: float,
     the bracket (e.g. price below intrinsic)."""
     if t <= 0:
         return None
-    intrinsic = (max(s - k, 0.0) if right is OptionRight.CALL else max(k - s, 0.0))
+    intrinsic = (max(s - k, 0.0) if right == OptionRight.CALL else max(k - s, 0.0))
     if price < intrinsic - 1e-8:
         return None
     f_lo = bsm_price(s, k, t, r, lo, right, q) - price
@@ -139,7 +139,7 @@ class StrategyEval:
 
 
 def _leg_payoff_at_expiry(leg: OptionLeg, spot: float) -> float:
-    if leg.right is OptionRight.CALL:
+    if leg.right == OptionRight.CALL:
         intrinsic = max(spot - leg.strike, 0.0)
     else:
         intrinsic = max(leg.strike - spot, 0.0)

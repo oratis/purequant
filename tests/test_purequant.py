@@ -54,6 +54,15 @@ class TestDerivatives(unittest.TestCase):
         self.assertTrue(0 < g.delta < 1)
         self.assertGreater(g.gamma, 0)
 
+    def test_string_right_matches_enum(self):
+        # "call"/"put" strings must behave identically to the OptionRight enum.
+        for right in ("call", "put"):
+            s = derivatives.bsm_price(100, 100, 1, 0.03, 0.2, right)
+            e = derivatives.bsm_price(100, 100, 1, 0.03, 0.2, OptionRight(right))
+            self.assertAlmostEqual(s, e, places=9)
+        self.assertAlmostEqual(
+            derivatives.bsm_price(100, 100, 1, 0.03, 0.2, "call"), 9.4134, places=3)
+
     def test_implied_vol_roundtrip(self):
         price = derivatives.bsm_price(100, 100, 1, 0.03, 0.3, OptionRight.CALL)
         iv = derivatives.implied_vol(price, 100, 100, 1, 0.03, OptionRight.CALL)
