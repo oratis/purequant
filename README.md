@@ -17,6 +17,8 @@ daily frequency.
 pip install purequant
 ```
 
+![purequant usage example](assets/example.svg)
+
 ## Why
 
 - **Zero dependencies.** One `pip install`, no build tools, works anywhere Python runs.
