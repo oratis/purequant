@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "purequant"
+version = "0.1.0"
+description = "Zero-dependency quantitative-finance toolkit in pure Python (VaR, Black-Scholes, duration, risk parity, factors, backtests) — no numpy/pandas."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { file = "LICENSE" }
+authors = [{ name = "oratis" }]
+keywords = ["quant", "finance", "risk", "var", "black-scholes", "options",
+            "bonds", "duration", "portfolio", "optimization", "backtest",
+            "factor", "no-dependencies", "pure-python"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Intended Audience :: Science/Research",
+    "License :: Free for non-commercial use",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Office/Business :: Financial :: Investment",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/oratis/purequant"
+Repository = "https://github.com/oratis/purequant"
+Issues = "https://github.com/oratis/purequant/issues"
+
+[tool.setuptools.packages.find]
+include = ["purequant*"]
+
+[tool.ruff]
+line-length = 100
